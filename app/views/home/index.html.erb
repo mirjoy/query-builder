@@ -8,3 +8,5 @@
   <%= f.select :entity, options_for_select(@entities.each { |ent| ent }) %></p>
   <%= f.submit "Submit", class: "btn btn-success" %>
 <% end %>
+
+<%= @query_results %>
