@@ -12,7 +12,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
 gem 'figaro'
-gem 'faraday'
+gem 'hurley'
 
 group :development, :test do
   gem 'pry'
