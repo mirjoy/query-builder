@@ -12,6 +12,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
 gem 'figaro'
+gem 'faraday'
 
 group :development, :test do
   gem 'pry'
@@ -20,5 +21,6 @@ group :development, :test do
   gem 'spring'
   gem 'capybara'
   gem 'launchy'
+  gem 'better_errors'
 end
 

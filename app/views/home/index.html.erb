@@ -5,7 +5,6 @@
   <p><%= f.label "Where " %>
   <%= f.text_field :news_query %></p>
   <p><%= f.label "Is mentioned as" %>
-  <%= f.select :entity, options_for_select(@entities.each { |ent| ent }),
-    { class: "dropdown" } %></p>
+  <%= f.select :entity, options_for_select(@entities.each { |ent| ent }) %></p>
   <%= f.submit "Submit", class: "btn btn-success" %>
 <% end %>

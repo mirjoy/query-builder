@@ -4,7 +4,9 @@ RSpec.describe "a user enters a full query", type: :feature do
   it "can use all of the functionality" do
     visit root_path
     fill_in("home[news_query]", with: "Martin Luther King")
-    find('#entity-type').find(:xpath, 'person').select_option
+    within('#home_entity') do
+      find('Person').select_option
+    end
 
     click_link_or_button("Submit")
     expect(page).to have_content(articles.first.title)
