@@ -1,4 +1,4 @@
-<h1 class="text-center">AlchemyAPI News Query Builder</h1>
+<h1 class="text-center">AlchemyAPI News Finder</h1>
 
 <div id="search-form">
   <h3>Search millions of news and blog articles</h3>
@@ -15,10 +15,11 @@
     <div class="danger"><%= flash[:error] %></div>
   <% end %>
 
-<% if @stories && !@stories.empty? && @stories.first.current_user == session.id %>
+<% if @stories && !@stories.empty? %>
   <% @stories.each_with_index do |story, index| %>
     <div class="story">
-      <h3>Story #<%= index + 1 %>: <%= link_to story.title, story.url %></h3>
+      <h3>Story #<%= index + 1 %>:
+        <%= link_to story.title, story.url %></h3>
 
       <!-- <p>Excerpt: <%= story.excerpt %></p> -->
       <p>Keywords: <%= story.keywords %></p>
@@ -41,6 +42,4 @@
       </table>
     </div>
   <% end %>
-<% else %>
-
 <% end %>

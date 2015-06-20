@@ -3,7 +3,7 @@ class HomeController < ApplicationController
 
   def index
     @entities = ['anything', 'Person', 'City', 'Company', 'Organization']
-    @stories = Story.all
+    @stories = Story.where(current_user: current_user)
   end
 
   def new
@@ -15,10 +15,10 @@ class HomeController < ApplicationController
 
     query = params[:home][:news_query].gsub(" ", "%20")
     entity = params[:home][:entity].downcase
-    query_results = OpenStruct.new(ApiService.call_api(query, entity))
+    query_results = ApiService.call_api(query, entity)
 
-    if query_results.result["docs"]
-      query_results.result["docs"].slice(0..14).map do |story|
+    if query_results["result"]["docs"]
+      query_results["result"]["docs"].slice(0..14).map do |story|
         s = Story.create(
           title: story["source"]["enriched"]["url"]["title"],
           url: story["source"]["enriched"]["url"]["url"],
