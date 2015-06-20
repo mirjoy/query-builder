@@ -10,30 +10,33 @@ class HomeController < ApplicationController
   end
 
   def create
-    Story.destroy_all
-    Entity.destroy_all
+    Story.where(current_user: current_user).destroy_all
+    Entity.where(current_user: current_user).destroy_all
+
     query = params[:home][:news_query].gsub(" ", "%20")
     entity = params[:home][:entity].downcase
     query_results = OpenStruct.new(ApiService.call_api(query, entity))
 
     if query_results.result["docs"]
-    query_results.result["docs"].slice(0..14).map do |story|
-      s = Story.create(
-        title: story["source"]["enriched"]["url"]["title"],
-        url: story["source"]["enriched"]["url"]["url"],
-        excerpt: "",
-        keywords: clean_up_string(story["source"]["enriched"]["url"]["enrichedTitle"]["keywords"].first["knowledgeGraph"]["typeHierarchy"]),
-        sentiment: story["source"]["enriched"]["url"]["enrichedTitle"]["docSentiment"]["type"].capitalize,
-        taxonomy: clean_up_string(story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"][1]["label"])
-      )
+      query_results.result["docs"].slice(0..14).map do |story|
+        s = Story.create(
+          title: story["source"]["enriched"]["url"]["title"],
+          url: story["source"]["enriched"]["url"]["url"],
+          excerpt: "",
+          keywords: clean_up_string(story["source"]["enriched"]["url"]["enrichedTitle"]["keywords"].first["knowledgeGraph"]["typeHierarchy"]),
+          sentiment: story["source"]["enriched"]["url"]["enrichedTitle"]["docSentiment"]["type"].capitalize,
+          # taxonomy: story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"][1]["label"],
+          current_user: current_user
+        )
 
-      story["source"]["enriched"]["url"]["enrichedTitle"]["entities"].each do |ent|
-        Entity.create(
-            title: ent["text"],
-            entity_type: ent["type"],
-            sentiment: ent["sentiment"]["type"],
-            story_id: s.id
-          )
+        story["source"]["enriched"]["url"]["enrichedTitle"]["entities"].each do |ent|
+          Entity.create(
+              title: ent["text"],
+              entity_type: ent["type"],
+              sentiment: ent["sentiment"]["type"],
+              story_id: s.id,
+              current_user: current_user
+            )
         end
       end
     else
@@ -45,7 +48,7 @@ class HomeController < ApplicationController
   private
 
   def clean_up_string(taxonomies)
-    if taxonomies.nil?
+    if taxonomies.nil? || taxonomies.empty?
       "This field was not found."
     else
       taxonomies.gsub(/^[\/]/, "").gsub("/", ", ").split.map(&:capitalize).join(' ')

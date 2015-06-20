@@ -15,7 +15,7 @@
     <div class="danger"><%= flash[:error] %></div>
   <% end %>
 
-<% if @stories %>
+<% if @stories && !@stories.empty? && @stories.first.current_user == session.id %>
   <% @stories.each_with_index do |story, index| %>
     <div class="story">
       <h3>Story #<%= index + 1 %>: <%= link_to story.title, story.url %></h3>
@@ -42,5 +42,5 @@
     </div>
   <% end %>
 <% else %>
-  <p>No stories were found.</p>
+
 <% end %>
