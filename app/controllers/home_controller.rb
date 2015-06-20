@@ -10,7 +10,8 @@ class HomeController < ApplicationController
   end
 
   def create
-    Story.destroy_all, Entity.destroy_all
+    Story.destroy_all
+    Entity.destroy_all
     query = params[:home][:news_query].gsub(" ", "%20")
     entity = params[:home][:entity].downcase
     query_results = OpenStruct.new(ApiService.call_api(query, entity))

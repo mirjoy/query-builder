@@ -1,6 +1,6 @@
 <h1 class="text-center">AlchemyAPI News Query Builder</h1>
 
-<h4>Search millions of news and blog articles</h4>
+<h3>Search millions of news and blog articles</h3>
 <%= form_for(:home, url: home_index_path, method: :post) do |f| %>
   <p><%= f.label "Where " %>
   <%= f.text_field :news_query %></p>
@@ -10,19 +10,27 @@
 <% end %>
 
 <% if @stories %>
-  <%= @stories.each_with_index do |story, index| %>
+  <% @stories.each_with_index do |story, index| %>
     <h3>Story #<%= index + 1 %>: <%= link_to story.title, story.url %></h3>
+
     <p>Excerpt: <%= story.excerpt %></p>
     <p>Keywords: <%= story.keywords %></p>
-    <p>Entities</p>
-    <%= story.entities.each do |ent| %>
-    <div class="row col-sm-12">
-      Text: <%= ent.title %>
-      Type: <%= ent.entity_type %>
-      Sentiment: <%= ent.sentiment %></p>
-    </div>
-    <% end %>
     <p>Sentiment: <%= story.sentiment %></p>
     <p>Taxonomy: <%= story.taxonomy %></p>
+
+    <table class="table table-striped">
+      <tr>
+        <td class="entity-header">Entity</td>
+        <td class="entity-header">Type</td>
+        <td class="entity-header">Sentiment</td>
+      </tr>
+      <% story.entities.each do |ent| %>
+        <tr>
+          <td><%= ent.title %></td>
+          <td><%= ent.entity_type %></td>
+          <td><%= ent.sentiment.capitalize %></td>
+        </tr>
+      <% end %>
+    </table>
   <% end %>
 <% end %>
