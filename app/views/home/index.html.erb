@@ -1,36 +1,46 @@
 <h1 class="text-center">AlchemyAPI News Query Builder</h1>
 
-<h3>Search millions of news and blog articles</h3>
-<%= form_for(:home, url: home_index_path, method: :post) do |f| %>
-  <p><%= f.label "Where " %>
-  <%= f.text_field :news_query %></p>
-  <p><%= f.label "Is mentioned as" %>
-  <%= f.select :entity, options_for_select(@entities.each { |ent| ent }) %></p>
-  <%= f.submit "Submit", class: "btn btn-success" %>
-<% end %>
+<div id="search-form">
+  <h3>Search millions of news and blog articles</h3>
+  <%= form_for(:home, url: home_index_path, method: :post) do |f| %>
+    <p><%= f.label "Where " %>
+    <%= f.text_field :news_query %></p>
+    <p><%= f.label "Is mentioned as" %>
+    <%= f.select :entity, options_for_select(@entities.each { |ent| ent }) %></p>
+    <%= f.submit "Submit", class: "btn btn-success" %>
+  <% end %>
+</div>
+
+<% if flash[:error] %>
+    <div class="danger"><%= flash[:error] %></div>
+  <% end %>
 
 <% if @stories %>
   <% @stories.each_with_index do |story, index| %>
-    <h3>Story #<%= index + 1 %>: <%= link_to story.title, story.url %></h3>
+    <div class="story">
+      <h3>Story #<%= index + 1 %>: <%= link_to story.title, story.url %></h3>
 
-    <p>Excerpt: <%= story.excerpt %></p>
-    <p>Keywords: <%= story.keywords %></p>
-    <p>Sentiment: <%= story.sentiment %></p>
-    <p>Taxonomy: <%= story.taxonomy %></p>
+      <!-- <p>Excerpt: <%= story.excerpt %></p> -->
+      <p>Keywords: <%= story.keywords %></p>
+      <p>Sentiment: <%= story.sentiment %></p>
+      <p>Taxonomy: <%= story.taxonomy %></p>
 
-    <table class="table table-striped">
-      <tr>
-        <td class="entity-header">Entity</td>
-        <td class="entity-header">Type</td>
-        <td class="entity-header">Sentiment</td>
-      </tr>
-      <% story.entities.each do |ent| %>
+      <table class="table table-striped">
         <tr>
-          <td><%= ent.title %></td>
-          <td><%= ent.entity_type %></td>
-          <td><%= ent.sentiment.capitalize %></td>
+          <td class="entity-header">Entity</td>
+          <td class="entity-header">Type</td>
+          <td class="entity-header">Sentiment</td>
         </tr>
-      <% end %>
-    </table>
+        <% story.entities.each do |ent| %>
+          <tr class="entity">
+            <td id="entity-title"><%= ent.title %></td>
+            <td><%= ent.entity_type %></td>
+            <td><%= ent.sentiment.capitalize %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
   <% end %>
+<% else %>
+  <p>No stories were found.</p>
 <% end %>

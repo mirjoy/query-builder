@@ -16,35 +16,39 @@ class HomeController < ApplicationController
     entity = params[:home][:entity].downcase
     query_results = OpenStruct.new(ApiService.call_api(query, entity))
 
-    if !query_results.result["docs"]
-      @news_stories = "No stories were found."
-    else
-      @news_stories = query_results.result["docs"].slice(0..14).map do |story|
-        s = Story.create(
-          title: story["source"]["enriched"]["url"]["title"],
-          url: story["source"]["enriched"]["url"]["url"],
-          excerpt: "",
-          keywords: clean_up_string(story["source"]["enriched"]["url"]["enrichedTitle"]["keywords"].first["knowledgeGraph"]["typeHierarchy"]),
-          sentiment: story["source"]["enriched"]["url"]["enrichedTitle"]["docSentiment"]["type"].capitalize,
-          taxonomy: clean_up_string(story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"][1]["label"])
-        )
-        binding.pry
-        story["source"]["enriched"]["url"]["enrichedTitle"]["entities"].each do |ent|
-          Entity.create(
-              title: ent["text"],
-              entity_type: ent["type"],
-              sentiment: ent["sentiment"]["type"],
-              story_id: s.id
-            )
-          end
+    if query_results.result["docs"]
+    query_results.result["docs"].slice(0..14).map do |story|
+      s = Story.create(
+        title: story["source"]["enriched"]["url"]["title"],
+        url: story["source"]["enriched"]["url"]["url"],
+        excerpt: "",
+        keywords: clean_up_string(story["source"]["enriched"]["url"]["enrichedTitle"]["keywords"].first["knowledgeGraph"]["typeHierarchy"]),
+        sentiment: story["source"]["enriched"]["url"]["enrichedTitle"]["docSentiment"]["type"].capitalize,
+        taxonomy: clean_up_string(story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"][1]["label"])
+      )
+
+      story["source"]["enriched"]["url"]["enrichedTitle"]["entities"].each do |ent|
+        Entity.create(
+            title: ent["text"],
+            entity_type: ent["type"],
+            sentiment: ent["sentiment"]["type"],
+            story_id: s.id
+          )
+        end
       end
+    else
+      flash[:error] = "No stories were found."
     end
-    redirect_to :back,  flash: { :news_stories => @news_stories }
+    redirect_to :back
   end
 
   private
 
   def clean_up_string(taxonomies)
-    taxonomies.gsub(/^[\/]/, "").gsub("/", ", ").split.map(&:capitalize).join(' ')
+    if taxonomies.nil?
+      "This field was not found."
+    else
+      taxonomies.gsub(/^[\/]/, "").gsub("/", ", ").split.map(&:capitalize).join(' ')
+    end
   end
 end

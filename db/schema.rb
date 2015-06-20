@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150620020820) do
+ActiveRecord::Schema.define(version: 20150620040236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,12 +39,12 @@ ActiveRecord::Schema.define(version: 20150620020820) do
     t.string   "title"
     t.string   "url"
     t.string   "excerpt"
-    t.string   "keywords"
+    t.string   "keywords",   default: "No keywords found."
     t.string   "entity"
     t.string   "sentiment"
     t.string   "taxonomy"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
   end
 
 end
