@@ -14,6 +14,8 @@ gem 'autoprefixer-rails'
 gem 'figaro'
 gem 'faraday'
 gem 'excon'
+gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
+
 
 group :development, :test do
   gem 'pry'

@@ -9,4 +9,17 @@
   <%= f.submit "Submit", class: "btn btn-success" %>
 <% end %>
 
-<%= @query_results %>
+<% if flash[:news_stories] %>
+  <% if flash[:news_stories].class == String %>
+    <p><%= flash[:news_stories] %></p>
+  <% else %>
+    <%= flash[:news_stories].each_with_index do |story, index| %>
+      <h3>Story #<%= index + 1 %>: <%= link_to story.title, story.url %></h3>
+      <p>Excerpt: <%= story.excerpt %></p>
+      <p>Keywords: <%= story.keywords %></p>
+      <p>Entities: <%= story.entity %></p>
+      <p>Sentiment: <%= story.sentiment %></p>
+      <p>Taxonomy: <%= story.taxonomy %></p>
+    <% end %>
+  <% end %>
+<% end %>
