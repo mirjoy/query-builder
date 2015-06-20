@@ -13,8 +13,8 @@ class HomeController < ApplicationController
     Story.where(current_user: current_user).destroy_all
     Entity.where(current_user: current_user).destroy_all
 
-    query = params[:home][:news_query].gsub(" ", "%20")
-    entity = params[:home][:entity].downcase
+    query = params[:query][:query].gsub(" ", "%20")
+    entity = params[:query][:entity].downcase
     query_results = ApiService.call_api(query, entity)
 
     if query_results["result"]["docs"]

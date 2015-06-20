@@ -2,40 +2,35 @@
 
 <div id="search-form">
   <h3>Search millions of news and blog articles</h3>
-  <%= form_for(:home, url: home_index_path, method: :post) do |f| %>
     <div class="row col-sm-12">
-      <div class="col-sm-2">
-       <%= f.label "Where " %>
-      </div>
+      <div class="col-sm-3">Where</div>
+      <div class="col-sm-3"><input id="news-query"></input></div>
+    </div>
+    <div class="row col-sm-12">
       <div class="col-sm-3">
-        <%= f.text_field :news_query %></p>
+        <p>Is mentioned as (a)</p>
+      </div>
+
+      <div class="dropdown col-sm-3">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          Select an Entity
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" name="entity-selection[entity]">
+
+          <% @entities.each do |entity| %>
+          <li><a href="#"><%= entity %></a></li>
+         <% end %>
+        </ul>
       </div>
     </div>
-    <div class="row col-sm-12">
-    <div class="col-sm-2">
-      <p><%= f.label "Is mentioned as" %>
-    </div>
-   <!--  <%= f.select :entity, options_for_select(@entities.each { |ent| ent }, class: "dropdown") %> -->
-   <div class="dropdown col-sm-3">
-      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        Select an Entity
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-        <% @entities.each do |entity| %>
-        <li><a href="#"><%= entity %></a></li>
-       <% end %>
-      </ul>
-    </div>
-  </div>
-  <div class="row col-sm-12" id="submit">
-    <div class="col-sm-2">&nbsp;</div>
+  <div class="row col-sm-12">
+    <div class="col-sm-3">&nbsp;</div>
     <div class="col-sm-3">
-      <%= f.submit "Submit", class: "btn btn-success" %>
+      <button class="btn btn-success", id="submit">Submit</button>
     </div>
   </div>
 </div>
-<% end %>
 
 <% if flash[:error] %>
   <div class="row col-sm-12">
