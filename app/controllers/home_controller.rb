@@ -19,13 +19,13 @@ class HomeController < ApplicationController
 
     if query_results["result"]["docs"]
       query_results["result"]["docs"].slice(0..14).map do |story|
-        check_for_taxonomy(story)
+        check_presence_of_keywords_and_taxonomy(story)
 
         s = Story.create(
           title: story["source"]["enriched"]["url"]["title"],
           url: story["source"]["enriched"]["url"]["url"],
           excerpt: "",
-          keywords: clean_up_string(story["source"]["enriched"]["url"]["enrichedTitle"]["keywords"].first["knowledgeGraph"]["typeHierarchy"]),
+          keywords: clean_up_string(@keywords),
           sentiment: story["source"]["enriched"]["url"]["enrichedTitle"]["docSentiment"]["type"].capitalize,
           taxonomy: clean_up_string(@taxonomy),
           current_user: current_user
@@ -61,5 +61,16 @@ class HomeController < ApplicationController
     if !story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"].empty?
      @taxonomy = story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"][1]["label"]
     end
+  end
+
+  def check_for_keywords(story)
+    if !story["source"]["enriched"]["url"]["enrichedTitle"]["keywords"].empty?
+     @keywords = story["source"]["enriched"]["url"]["enrichedTitle"]["keywords"].first["knowledgeGraph"]["typeHierarchy"]
+    end
+  end
+
+  def check_presence_of_keywords_and_taxonomy(story)
+    check_for_taxonomy(story)
+    check_for_keywords(story)
   end
 end
