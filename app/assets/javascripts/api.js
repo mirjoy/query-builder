@@ -15,7 +15,10 @@ $(document).ready(function(){
     $.ajax ({
         method: "POST",
         url: "/home",
-        data: { query: { query: query, entity: entity } }
+        data: { query: { query: query, entity: entity } },
+        success: function(){
+          location.reload();
+        }
       });
   }
 
