@@ -9,17 +9,20 @@
   <%= f.submit "Submit", class: "btn btn-success" %>
 <% end %>
 
-<% if flash[:news_stories] %>
-  <% if flash[:news_stories].class == String %>
-    <p><%= flash[:news_stories] %></p>
-  <% else %>
-    <%= flash[:news_stories].each_with_index do |story, index| %>
-      <h3>Story #<%= index + 1 %>: <%= link_to story.title, story.url %></h3>
-      <p>Excerpt: <%= story.excerpt %></p>
-      <p>Keywords: <%= story.keywords %></p>
-      <p>Entities: <%= story.entity %></p>
-      <p>Sentiment: <%= story.sentiment %></p>
-      <p>Taxonomy: <%= story.taxonomy %></p>
+<% if @stories %>
+  <%= @stories.each_with_index do |story, index| %>
+    <h3>Story #<%= index + 1 %>: <%= link_to story.title, story.url %></h3>
+    <p>Excerpt: <%= story.excerpt %></p>
+    <p>Keywords: <%= story.keywords %></p>
+    <p>Entities</p>
+    <%= story.entities.each do |ent| %>
+    <div class="row col-sm-12">
+      Text: <%= ent.title %>
+      Type: <%= ent.entity_type %>
+      Sentiment: <%= ent.sentiment %></p>
+    </div>
     <% end %>
+    <p>Sentiment: <%= story.sentiment %></p>
+    <p>Taxonomy: <%= story.taxonomy %></p>
   <% end %>
 <% end %>
