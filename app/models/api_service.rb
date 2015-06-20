@@ -7,7 +7,7 @@ class ApiService
     enc_uri = URI.escape("https://access.alchemyapi.com/calls/data/GetNews?apikey=#{ENV['alchemy_api_key']}")
 
     api_req = Faraday.get(enc_uri) do |req|
-      req.params["return"] = "enriched.url.title,enriched.url.url,enriched.url.enrichedTitle.docSentiment,enriched.url.enrichedTitle.taxonomy,enriched.url.enrichedTitle.entities"
+      req.params["return"] = "enriched.url.title,enriched.url.url,enriched.url.enrichedTitle.docSentiment,enriched.url.enrichedTitle.taxonomy,enriched.url.enrichedTitle.entities,enriched.url.enrichedTitle.entities,enriched.url.enrichedTitle.keywords"
       req.params["start"] = "now-5d"
       req.params["end"] = "now"
       req.params["q.enriched.url.enrichedTitle.entities.entity"] = "|text=#{query_string},type=#{entity}|"

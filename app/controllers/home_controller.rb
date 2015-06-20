@@ -24,9 +24,9 @@ class HomeController < ApplicationController
           title: story["source"]["enriched"]["url"]["title"],
           url: story["source"]["enriched"]["url"]["url"],
           excerpt: "",
-          keywords: "",
+          keywords: clean_up_string(story["source"]["enriched"]["url"]["enrichedTitle"]["keywords"].first["knowledgeGraph"]["typeHierarchy"]),
           sentiment: story["source"]["enriched"]["url"]["enrichedTitle"]["docSentiment"]["type"].capitalize,
-          taxonomy: clean_up_taxonomy(story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"][1]["label"])
+          taxonomy: clean_up_string(story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"][1]["label"])
         )
         binding.pry
         story["source"]["enriched"]["url"]["enrichedTitle"]["entities"].each do |ent|
@@ -44,7 +44,7 @@ class HomeController < ApplicationController
 
   private
 
-  def clean_up_taxonomy(taxonomies)
+  def clean_up_string(taxonomies)
     taxonomies.gsub(/^[\/]/, "").gsub("/", ", ").split.map(&:capitalize).join(' ')
   end
 end
