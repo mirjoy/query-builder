@@ -19,13 +19,18 @@ class HomeController < ApplicationController
 
     if query_results["result"]["docs"]
       query_results["result"]["docs"].slice(0..14).map do |story|
+
+        if !story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"].empty?
+          @taxonomy = story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"][1]["label"]
+        end
+
         s = Story.create(
           title: story["source"]["enriched"]["url"]["title"],
           url: story["source"]["enriched"]["url"]["url"],
           excerpt: "",
           keywords: clean_up_string(story["source"]["enriched"]["url"]["enrichedTitle"]["keywords"].first["knowledgeGraph"]["typeHierarchy"]),
           sentiment: story["source"]["enriched"]["url"]["enrichedTitle"]["docSentiment"]["type"].capitalize,
-          # taxonomy: story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"][1]["label"],
+          taxonomy: @taxonomy,
           current_user: current_user
         )
 
