@@ -19,10 +19,7 @@ class HomeController < ApplicationController
 
     if query_results["result"]["docs"]
       query_results["result"]["docs"].slice(0..14).map do |story|
-
-        if !story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"].empty?
-          @taxonomy = story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"][1]["label"]
-        end
+        check_for_taxonomy(story)
 
         s = Story.create(
           title: story["source"]["enriched"]["url"]["title"],
@@ -30,7 +27,7 @@ class HomeController < ApplicationController
           excerpt: "",
           keywords: clean_up_string(story["source"]["enriched"]["url"]["enrichedTitle"]["keywords"].first["knowledgeGraph"]["typeHierarchy"]),
           sentiment: story["source"]["enriched"]["url"]["enrichedTitle"]["docSentiment"]["type"].capitalize,
-          taxonomy: @taxonomy,
+          taxonomy: clean_up_string(@taxonomy),
           current_user: current_user
         )
 
@@ -57,6 +54,12 @@ class HomeController < ApplicationController
       "This field was not found."
     else
       taxonomies.gsub(/^[\/]/, "").gsub("/", ", ").split.map(&:capitalize).join(' ')
+    end
+  end
+
+  def check_for_taxonomy(story)
+    if !story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"].empty?
+     @taxonomy = story["source"]["enriched"]["url"]["enrichedTitle"]["taxonomy"][1]["label"]
     end
   end
 end
