@@ -1,7 +1,11 @@
 $(document).ready(function(){
   $('.entity').on('click', function(){
-    var entity = $(this).find("#entity-title").text()
+
+    var entity = $(this).find('.entity-title').text();
+    var entityType = $(this).find('.entity-type').text()
+
     $('#news-query').val(entity);
+    $('#dropdownMenu1').text(entityType);
     $('html, body').animate({ scrollTop: 0 }, 'fast');
   })
 

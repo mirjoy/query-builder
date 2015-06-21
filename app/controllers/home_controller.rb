@@ -24,7 +24,7 @@ class HomeController < ApplicationController
         s = Story.create(
           title: story["source"]["enriched"]["url"]["title"],
           url: story["source"]["enriched"]["url"]["url"],
-          excerpt: "",
+          excerpt: story["source"]["enriched"]["url"]["text"],
           keywords: clean_up_string(@keywords),
           sentiment: story["source"]["enriched"]["url"]["enrichedTitle"]["docSentiment"]["type"].capitalize,
           taxonomy: clean_up_string(@taxonomy),

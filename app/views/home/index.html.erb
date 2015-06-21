@@ -45,7 +45,7 @@
       <h3>Story #<%= index + 1 %>:
         <%= link_to story.title, story.url %></h3>
 
-      <!-- <p>Excerpt: <%= story.excerpt %></p> -->
+      <p>Excerpt: <%= story.excerpt %></p>
       <p>Keywords: <%= story.keywords %></p>
       <p>Sentiment: <%= story.sentiment %></p>
       <p>Taxonomy: <%= story.taxonomy %></p>
@@ -58,8 +58,8 @@
         </tr>
         <% story.entities.each do |ent| %>
           <tr class="entity">
-            <td id="entity-title"><%= ent.title %></td>
-            <td><%= ent.entity_type %></td>
+            <td class="entity-title" data-type="<%= ent.id %>"><button class="btn btn-info"><%= ent.title %></button></td>
+            <td class="entity-type" data-type="<%= ent.id %>"><%= ent.entity_type %></td>
             <td><%= ent.sentiment.capitalize %></td>
           </tr>
         <% end %>
